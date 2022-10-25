@@ -1,0 +1,262 @@
+openapi: 3.0.0
+info: 
+  title: Todo app api
+  version: 0.0.1
+paths:
+  /accounts/register:
+    post:
+      operationId:  registerAccount
+      tags:
+        - accounts
+      summary: Register Account
+      description: アカウントを新規作成する
+      parameters: []
+      responses:
+        '200':
+          description: 'アカウント作成成功時'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenWithAccount'
+                    
+  /accounts/current:
+    get:
+      operationId: getCurrentAccount
+      tags:
+        - accounts
+      summary: Get current Account
+      description: '現在認証しているアカウントの情報を取得する'
+      parameters: []
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: '現在認証しているアカウントの情報取得成功時'
+          content:
+            application/json:
+              schema:
+                  $ref: '#/components/schemas/Account'
+        '401':
+          description: '認証失敗時'
+          
+                  
+  
+  /tasks:
+    get:
+      operationId: getTasks
+      tags:
+        - tasks
+      summary: Get all tasks
+      description: '自身が保有しているタスクを取得する'
+      parameters: []
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: '取得成功時'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Task'
+                  
+    post:
+      operationId: createTask
+      tags:
+        - tasks
+      summary:  Create a Task
+      parameters: []
+      security:
+        - ApiKeyAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '200':
+          description: '作成成功時'
+        '400':
+          description: '必要なパラメーターや入力内容に問題がある時'
+        '401':
+          description: '認証失敗時'
+  /tasks/{taskId}/complete:
+    post:
+      operationId: completeTask
+      tags:
+        - tasks
+      summary: Complete a Task
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: taskId
+          in: path
+          description: task id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '201':
+          description: 'タスク完了成功時'
+        '401':
+          description: '認証失敗時'
+        
+                
+  /tasks/{taskId}:
+    get:
+      operationId: getTask
+      tags:
+        - tasks
+      summary: Get a Task by TaskId
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: taskId
+          in: path
+          description: task id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'タスク取得成功時'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '401':
+          description: '認証失敗時'
+        '404':
+          description: 'タスクが存在しない時'
+    put:
+      operationId: updateTask
+      tags:
+        - tasks
+      summary: Update Task
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: taskId
+          in: path
+          description: task id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - title
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '201':
+          description: 'タスク更新成功時'
+        '401':
+          description: '認証失敗時'
+    delete:
+      operationId: deleteTask
+      tags:
+        - tasks
+      summary: Delete Task
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: taskId
+          in: path
+          description: task id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '201':
+          description: 'タスク削除成功時'
+        '401':
+          description: '認証失敗時'
+        '404':
+          description: 'タスクが存在しない時'
+      
+components:
+  schemas:
+    Account:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+
+    TokenWithAccount:
+      type: object
+      required:
+        - token
+        - account
+      properties:
+        token:
+          type: string
+        account:
+          $ref: '#/components/schemas/Account'
+          
+      example:
+        token: testtoken
+        account:
+          id: 1
+          name: null
+          
+    Task:
+      type: object
+      required:
+        - id
+        - title
+        - accountId
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        completedAt:
+          type: string
+          format: date-time
+        accountId:
+          type: integer
+      example:
+        id: 1
+        title: 買い物に行く
+        description: 大根とにんじんを買う
+        createdAt: '2020-01-31T23:59:59+09:00'
+        completedAt: null
+        accountId: 1
+        
+      
+
+  securitySchemes:
+    ApiKeyAuth:
+      type: http
+      scheme: bearer
+      description: Credentials or access token for API
+
+  
