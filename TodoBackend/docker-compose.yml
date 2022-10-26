@@ -6,10 +6,9 @@ services:
       - 8080:8080
     tty: true
     volumes:
-      - ./:/usr/app/backend/TodoBackend/
-      - ../../openapi/:/usr/app/openapi
+      - ./:/usr/app/TodoBackend/
+      - ../openapi/:/usr/app/openapi
     entrypoint:
       - sh
       - ./gradlew
       - bootRun
-    

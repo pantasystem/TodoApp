@@ -55,7 +55,7 @@ tasks.withType<Test> {
 
 task<GenerateTask>("generateApiServer") {
     generatorName.set("kotlin-spring")
-    inputSpec.set("$projectDir/../../openapi/openapi.yml")
+    inputSpec.set("$projectDir/../openapi/openapi.yml")
     outputDir.set("$buildDir/openapi/server-code/")
     apiPackage.set("com.example.realworldkotlinspringbootjdbc.openapi.generated.controller")
     modelPackage.set("com.example.realworldkotlinspringbootjdbc.openapi.generated.model")

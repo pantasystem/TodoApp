@@ -89,7 +89,7 @@ class AccountRepositoryImpl : AccountRepository{
     override fun register(): TokenWithAccount {
         return TokenWithAccount(
             "hog234234",
-            account = Account(0, "hoge22aefwaef22")
+            account = Account(0, "Pan")
         )
     }
 }
