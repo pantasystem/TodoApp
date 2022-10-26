@@ -36,6 +36,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("jakarta.validation:jakarta.validation-api")
     compileOnly("jakarta.annotation:jakarta.annotation-api:2.1.1")
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
 //    implementation("org.springframework.boot:spring-boot-starter-security")
 //    implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity5")
 }
