@@ -22,11 +22,10 @@ class WebAuthConfig : WebMvcConfigurer {
         super.addInterceptors(registry)
         registry.addInterceptor(object : HandlerInterceptor {
             override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
-                println("in inspector")
                 val method = (handler as? HandlerMethod)?.method
-//                if (method != null && AnnotationUtils.findAnnotation(method, NonAuthorize::class.java) != null) {
-//                    return true
-//                }
+                if (method != null && AnnotationUtils.findAnnotation(method, NonAuthorize::class.java) != null) {
+                    return true
+                }
 
                 val controller = method?.declaringClass
                 if ((controller != null
@@ -35,14 +34,12 @@ class WebAuthConfig : WebMvcConfigurer {
                 ) {
                     val authorizationHeader = request.getHeader("Authorization")
                     if (authorizationHeader.isNullOrBlank()) {
-                        println("認証失敗")
                         throw ResponseStatusException(HttpStatus.UNAUTHORIZED)
                     }
-                    if (!authorizationHeader.startsWith("Bearer ")) {
-                        println("認証失敗")
+                    val token = authorizationHeader.getBearerToken()
+                    if (token.isNullOrBlank()) {
                         throw ResponseStatusException(HttpStatus.UNAUTHORIZED)
                     }
-                    val token = authorizationHeader.substring(7)
                     return transaction {
                         Accounts.select( Accounts.token eq token).limit(1).firstOrNull() != null
                     }
