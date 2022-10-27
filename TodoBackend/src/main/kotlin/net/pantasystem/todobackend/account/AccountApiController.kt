@@ -20,8 +20,15 @@ class AccountApiController : AccountsApi {
     }
 
     override fun registerAccount(): ResponseEntity<TokenWithAccount> {
+        val account = accountRepository.register()
         return ResponseEntity(
-            accountRepository.register(),
+            TokenWithAccount(
+                token = account.token,
+                account = AccountDTO(
+                    id = account.id.toInt(),
+                    name = account.name
+                )
+            ),
             HttpStatus.OK
         )
     }

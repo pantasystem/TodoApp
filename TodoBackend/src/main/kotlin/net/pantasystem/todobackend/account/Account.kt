@@ -1,4 +1,7 @@
 package net.pantasystem.todobackend.account
 
-class Account {
-}
+data class Account(
+    val name: String,
+    val token: String,
+    val id: Long = 0L
+)

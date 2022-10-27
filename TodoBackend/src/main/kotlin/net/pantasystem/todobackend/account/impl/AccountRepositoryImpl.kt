@@ -1,15 +1,25 @@
 package net.pantasystem.todobackend.account.impl
 
-import com.example.realworldkotlinspringbootjdbc.openapi.generated.model.Account
-import com.example.realworldkotlinspringbootjdbc.openapi.generated.model.TokenWithAccount
+import net.pantasystem.todobackend.account.Account
 import net.pantasystem.todobackend.account.AccountRepository
+import net.pantasystem.todobackend.account.Accounts
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.transactions.transaction
+import java.util.UUID
 
 class AccountRepositoryImpl : AccountRepository {
 
-    override fun register(): TokenWithAccount {
-        return TokenWithAccount(
-            "hog234234",
-            account = Account(0, "Pan")
+    override fun register(): Account {
+        val account = Account(
+            name = "",
+            token = UUID.randomUUID().toString()
         )
+        val aId = transaction {
+            Accounts.insert {
+                it[name] = account.name
+                it[token] = account.token
+            }[Accounts.id]
+        }
+        return account.copy(id = aId)
     }
 }
