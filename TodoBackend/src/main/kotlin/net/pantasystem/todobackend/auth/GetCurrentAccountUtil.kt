@@ -7,12 +7,11 @@ import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.http.HttpStatus
 import org.springframework.web.context.request.RequestAttributes
-import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.context.request.ServletRequestAttributes
 import org.springframework.web.server.ResponseStatusException
 
-fun RequestAttributes.getCurrentAccount(): Account? {
-    val token = (this as? ServletRequestAttributes)
+fun RequestAttributes?.getCurrentAccount(): Account? {
+    val token = (this as? ServletRequestAttributes?)
         ?.request
         ?.getHeader("Authorization")
         ?.getBearerToken()
@@ -30,6 +29,6 @@ fun RequestAttributes.getCurrentAccount(): Account? {
     }
 }
 
-fun RequestAttributes.getCurrentAccountOrFailure(): Account {
+fun RequestAttributes?.getCurrentAccountOrFailure(): Account {
     return getCurrentAccount() ?: throw ResponseStatusException(HttpStatus.UNAUTHORIZED)
 }

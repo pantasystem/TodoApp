@@ -11,7 +11,7 @@ object Tasks : Table() {
     val createdAt = datetimeWithTZ("createdAt")
     val updatedAt = datetimeWithTZ("updatedAt")
     val accountId = (long("accountId") references Accounts.id).index()
-    val completedAt = datetimeWithTZ("completedAt")
+    val completedAt = datetimeWithTZ("completedAt").nullable()
 
     override val primaryKey: PrimaryKey
         get() = PrimaryKey(id)
