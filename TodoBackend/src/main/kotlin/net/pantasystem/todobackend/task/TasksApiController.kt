@@ -2,14 +2,25 @@ package net.pantasystem.todobackend.task
 
 import com.example.realworldkotlinspringbootjdbc.openapi.generated.controller.TasksApi
 import com.example.realworldkotlinspringbootjdbc.openapi.generated.model.CreateTaskRequest
+import net.pantasystem.todobackend.auth.Authorize
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties.Security
 import com.example.realworldkotlinspringbootjdbc.openapi.generated.model.Task as TaskDTO
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.context.request.RequestContextHolder
+import org.springframework.web.context.request.ServletRequestAttributes
+import org.springframework.web.servlet.support.RequestContext
 
 @RestController
 class TaskApiController : TasksApi {
+    @Authorize
     override fun getTasks(): ResponseEntity<List<TaskDTO>> {
-        return super.getTasks()
+        val token = (RequestContextHolder.getRequestAttributes() as ServletRequestAttributes)
+            .request
+            .getHeader("Authorization")
+        println(token)
+
+        return ResponseEntity.ok(listOf())
     }
 
     override fun completeTask(taskId: Int): ResponseEntity<Unit> {
