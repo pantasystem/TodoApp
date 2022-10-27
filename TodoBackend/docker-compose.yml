@@ -3,7 +3,7 @@ services:
   app:
     build: .
     ports:
-      - 8080:8080
+      - "8080:8080"
     tty: true
     volumes:
       - ./:/usr/app/TodoBackend/
@@ -12,3 +12,15 @@ services:
       - sh
       - ./gradlew
       - bootRun
+    restart: always
+    depends_on:
+      - psql
+  psql:
+    image: postgres:15.0-bullseye
+    ports:
+      - "5432:5432"
+    restart: always
+    environment:
+      POSTGRES_USER: dbuser
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: todo_db

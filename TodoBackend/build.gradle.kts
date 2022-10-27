@@ -39,6 +39,11 @@ dependencies {
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 //    implementation("org.springframework.boot:spring-boot-starter-security")
 //    implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity5")
+    implementation("org.jetbrains.exposed", "exposed-core", "0.40.1")
+    implementation("org.jetbrains.exposed", "exposed-dao", "0.40.1")
+    implementation("org.jetbrains.exposed", "exposed-jdbc", "0.40.1")
+
+    implementation("org.postgresql:postgresql:42.5.0")
 }
 
 tasks.withType<KotlinCompile> {
