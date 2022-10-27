@@ -69,6 +69,7 @@ task<GenerateTask>("generateApiServer") {
     configOptions.set(
         mapOf(
             "interfaceOnly" to "true",
+            "dateLibrary" to "java8"
         )
     )
     /**
@@ -79,6 +80,8 @@ task<GenerateTask>("generateApiServer") {
             "useTags" to "true"
         )
     )
+
+
 }
 kotlin.sourceSets.main {
     kotlin.srcDir("$buildDir/openapi/server-code/src/main")

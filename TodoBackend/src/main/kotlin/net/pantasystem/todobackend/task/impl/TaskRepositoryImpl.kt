@@ -1,6 +1,5 @@
 package net.pantasystem.todobackend.task.impl
 
-import kotlinx.datetime.Clock
 import net.pantasystem.todobackend.task.Task
 import net.pantasystem.todobackend.task.TaskRepository
 import net.pantasystem.todobackend.task.Tasks
@@ -9,6 +8,7 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
+import java.time.Instant
 
 class TaskRepositoryImpl : TaskRepository {
 
@@ -17,8 +17,8 @@ class TaskRepositoryImpl : TaskRepository {
             Tasks.insert {
                 it[title] = task.title
                 it[description] = task.description ?: ""
-                it[createdAt] = Clock.System.now()
-                it[updatedAt] = Clock.System.now()
+                it[createdAt] = Instant.now()
+                it[updatedAt] = Instant.now()
                 it[accountId] = task.accountId
             }[Tasks.id]
         }
@@ -65,7 +65,7 @@ class TaskRepositoryImpl : TaskRepository {
                 it[title] = task.title
                 it[description] = task.description ?: ""
                 it[completedAt] = task.completedAt
-                it[updatedAt] = Clock.System.now()
+                it[updatedAt] = Instant.now()
             }
         }
     }
