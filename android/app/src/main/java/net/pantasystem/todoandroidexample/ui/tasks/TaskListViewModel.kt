@@ -4,10 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import net.pantasystem.todoandroidexample.api.Task
 import net.pantasystem.todoandroidexample.domain.TaskRepository
@@ -19,10 +16,18 @@ class TaskListViewModel @Inject constructor(
 ): ViewModel() {
 
     private val _tasks = MutableStateFlow<List<Task>>(emptyList())
-    val tasks: StateFlow<List<Task>> = _tasks
 
     private val _errors = MutableSharedFlow<Throwable?>()
     val errors: SharedFlow<Throwable?> = _errors
+
+    private val _searchWord = MutableStateFlow<SearchWord>(SearchWord.None)
+
+    val uiState = combine(_tasks, _searchWord) { tasks, searchWord ->
+        TasksUiState(
+            tasks,
+            searchWord,
+        )
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), TasksUiState())
 
     init {
         viewModelScope.launch {
@@ -55,5 +60,43 @@ class TaskListViewModel @Inject constructor(
         }
     }
 
+    fun toggleSearchMode() {
+        _searchWord.update {
+            when(it) {
+                SearchWord.None -> SearchWord.Search("")
+                is SearchWord.Search -> SearchWord.None
+            }
+        }
+    }
 
+    fun search(keyword: String) {
+        _searchWord.update {
+            when(it) {
+                SearchWord.None -> SearchWord.None
+                is SearchWord.Search -> SearchWord.Search(keyword)
+            }
+        }
+    }
+
+}
+
+data class TasksUiState(
+    val tasks: List<Task> = emptyList(),
+    val searchWord: SearchWord = SearchWord.None,
+) {
+    val filteredTasks: List<Task> by lazy {
+        when(searchWord) {
+            SearchWord.None -> tasks
+            is SearchWord.Search -> {
+                tasks.filter {
+                    it.title.startsWith(searchWord.keyword)
+                }
+            }
+        }
+    }
+}
+
+sealed interface SearchWord {
+    object None : SearchWord
+    data class Search(val keyword: String) : SearchWord
 }

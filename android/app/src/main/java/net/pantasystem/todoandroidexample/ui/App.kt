@@ -2,6 +2,7 @@ package net.pantasystem.todoandroidexample.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -47,7 +48,7 @@ fun App(
                 BottomNav(navController = navController)
             }
         },
-    ) {
+    ) { paddingValues ->
         when (currentUiState) {
             is MainUiState.Authorized -> {
                 NavHost(
@@ -56,6 +57,7 @@ fun App(
                 ) {
                     composable(Routes.TopLevel.Home.route) {
                         TaskListRoute(
+                            modifier = Modifier.padding(paddingValues),
                             navigateToTaskDetail = {
                                 navController.navigateTaskDetail(it)
                             },
