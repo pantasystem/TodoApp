@@ -195,6 +195,37 @@ import com.fasterxml.jackson.databind.ObjectMapper
             }
 
         /**
+        * Un Complete a Task
+        * 
+         * @param taskId task id 
+         * @return void
+        */
+        open suspend fun uncompleteTask(taskId: kotlin.Long): HttpResponse<Unit> {
+
+            val localVariableAuthNames = listOf<String>("ApiKeyAuth")
+
+            val localVariableBody = 
+                    io.ktor.client.utils.EmptyContent
+
+            val localVariableQuery = mutableMapOf<String, List<String>>()
+
+            val localVariableHeaders = mutableMapOf<String, String>()
+
+            val localVariableConfig = RequestConfig<kotlin.Any?>(
+            RequestMethod.POST,
+            "/tasks/{taskId}/uncomplete".replace("{" + "taskId" + "}", "$taskId"),
+            query = localVariableQuery,
+            headers = localVariableHeaders
+            )
+
+            return request(
+            localVariableConfig,
+            localVariableBody,
+            localVariableAuthNames
+            ).wrap()
+            }
+
+        /**
         * Update Task
         * 
          * @param taskId task id 

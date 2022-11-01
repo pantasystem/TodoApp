@@ -5,11 +5,13 @@ import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.jackson.*
 import io.ktor.util.pipeline.*
 import net.pantasystem.todoandroidexample.api.AccountsApi
 import net.pantasystem.todoandroidexample.api.TasksApi
+import net.pantasystem.todoandroidexample.errors.UnauthorizedError
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -22,6 +24,16 @@ class ApiProvider @Inject constructor() {
 
         it.defaultRequest {
             this.contentType(ContentType.Application.Json)
+        }
+        it.HttpResponseValidator {
+            handleResponseExceptionWithRequest { exception, request ->
+                val clientException = exception as? ClientRequestException ?: return@handleResponseExceptionWithRequest
+                val exceptionResponse = clientException.response
+                if (exceptionResponse.status == HttpStatusCode.Unauthorized) {
+                    val exceptionResponseText = exceptionResponse.bodyAsText()
+                    throw UnauthorizedError(exceptionResponseText)
+                }
+            }
         }
 
 

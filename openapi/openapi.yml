@@ -114,7 +114,29 @@ paths:
           description: 'タスク完了成功時'
         '401':
           description: '認証失敗時'
-        
+  
+  /tasks/{taskId}/uncomplete:
+    post:
+      operationId: uncompleteTask
+      tags:
+        - tasks
+      summary: Un Complete a Task
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: taskId
+          in: path
+          description: task id
+          required: true
+          schema:
+            type: integer
+            format: 'int64'
+      responses:
+        '201':
+          description: 'タスク未完了成功時'
+        '401':
+          description: '認証失敗時'
+       
                 
   /tasks/{taskId}:
     get:

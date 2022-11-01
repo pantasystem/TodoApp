@@ -99,4 +99,17 @@ class TaskApiController : TasksApi {
             createdAt = task.createdAt?.atOffset(ZoneOffset.UTC),
         ))
     }
+
+    @Authorize
+    override fun uncompleteTask(taskId: Long): ResponseEntity<Unit> {
+        val account = RequestContextHolder.getRequestAttributes().getCurrentAccountOrFailure()
+        val task = taskRepository.findOne(taskId)
+        if (account.id != task.accountId) {
+            return ResponseEntity
+                .notFound()
+                .build()
+        }
+        taskRepository.update(task.copy(completedAt = null))
+        return ResponseEntity.ok(Unit)
+    }
 }

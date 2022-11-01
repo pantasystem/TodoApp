@@ -1,5 +1,7 @@
 package net.pantasystem.todoandroidexample.impl
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import net.pantasystem.todoandroidexample.ApiProvider
 import net.pantasystem.todoandroidexample.api.CreateTaskRequest
 import net.pantasystem.todoandroidexample.api.Task
@@ -13,37 +15,55 @@ class TaskRepositoryImpl @Inject constructor(
     private val apiProvider: ApiProvider,
 ) : TaskRepository {
     override suspend fun findTasks(): Result<List<Task>> = runCatching {
-        val token = authRepository.getToken()
-        apiProvider.getTasksApi().apply {
-            setBearerToken(token ?: "")
-        }.getTasks().body()
+        withContext(Dispatchers.IO) {
+            val token = authRepository.getToken()
+            apiProvider.getTasksApi().apply {
+                setBearerToken(token ?: "")
+            }.getTasks().body()
+        }
     }
 
     override suspend fun create(title: String, description: String?): Result<Unit> = runCatching {
-        val token = authRepository.getToken()
-        apiProvider.getTasksApi().apply {
-            setBearerToken(token ?: "")
-        }.createTask(CreateTaskRequest(title = title, description = description)).body()
+        withContext(Dispatchers.IO) {
+            val token = authRepository.getToken()
+            apiProvider.getTasksApi().apply {
+                setBearerToken(token ?: "")
+            }.createTask(CreateTaskRequest(title = title, description = description)).body()
+        }
     }
 
     override suspend fun completeTask(taskId: Long): Result<Unit> = runCatching {
-        val token = authRepository.getToken()
-        apiProvider.getTasksApi().apply {
-            setAccessToken(token ?: "")
-        }.completeTask(taskId)
+        withContext(Dispatchers.IO) {
+            val token = authRepository.getToken()
+            apiProvider.getTasksApi().apply {
+                setBearerToken(token ?: "")
+            }.completeTask(taskId)
+        }
     }
 
     override suspend fun delete(taskId: Long): Result<Unit> = runCatching {
-        val token = authRepository.getToken()
-        apiProvider.getTasksApi().apply {
-            setAccessToken(token ?: "")
-        }.deleteTask(taskId)
+        withContext(Dispatchers.IO) {
+            val token = authRepository.getToken()
+            apiProvider.getTasksApi().apply {
+                setAccessToken(token ?: "")
+            }.deleteTask(taskId)
+        }
     }
 
     override suspend fun findOne(taskId: Long): Result<Task> = runCatching {
-        val token = authRepository.getToken()
-        apiProvider.getTasksApi().apply {
-            setAccessToken(token ?: "")
-        }.getTask(taskId).body()
+        withContext(Dispatchers.IO) {
+            val token = authRepository.getToken()
+            apiProvider.getTasksApi().apply {
+                setBearerToken(token ?: "")
+            }.getTask(taskId).body()
+        }
+    }
+
+    override suspend fun uncompleteTask(taskId: Long): Result<Unit> = runCatching {
+        withContext(Dispatchers.IO) {
+            apiProvider.getTasksApi().apply {
+                setBearerToken(authRepository.getToken() ?: "")
+            }.uncompleteTask(taskId)
+        }
     }
 }

@@ -27,7 +27,7 @@ class TaskRepositoryImpl : TaskRepository {
 
     override fun findByAccount(accountId: Long): List<Task> {
         return transaction {
-            Tasks.select(Tasks.accountId eq accountId).map {
+            Tasks.select(Tasks.accountId eq accountId).orderBy(Tasks.createdAt).map {
                 Task(
                     id = it[Tasks.id],
                     title = it[Tasks.title],

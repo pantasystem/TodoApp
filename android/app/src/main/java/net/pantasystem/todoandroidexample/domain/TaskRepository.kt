@@ -14,4 +14,6 @@ interface TaskRepository {
 
     suspend fun delete(taskId: Long): Result<Unit>
 
+    suspend fun uncompleteTask(taskId: Long): Result<Unit>
+
 }
