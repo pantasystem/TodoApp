@@ -90,10 +90,10 @@ task buildKotlinClient(type: GenerateTask){
     generatorName = "kotlin"
     inputSpec = "$rootDir/../openapi/openapi.yml".toString()
     outputDir = "$buildDir/kotlin/openapi-client".toString()
-    apiPackage = "net.pantasystem.healthcycle.api"
-    invokerPackage = "net.pantasystem.healthcycle.client"
+    apiPackage = "net.pantasystem.todoandroidexample.api"
+    invokerPackage = "net.pantasystem.todoandroidexample.client"
 
-    modelPackage = "net.pantasystem.healthcycle.api"
+    modelPackage = "net.pantasystem.todoandroidexample.api"
     configOptions = [
             dateLibrary: "java8"
     ]
@@ -101,16 +101,18 @@ task buildKotlinClient(type: GenerateTask){
             modelDocs: "false"
     ]
 
-    library = "multiplatform"
+    library = "jvm-ktor"
     additionalProperties.put("useCoroutines", "true")
 }
 
 task copy(type: Copy) {
-    def dirFrom = "$buildDir/kotlin/src/main/kotlin/net/pantasystem/healthcycle"
-    def dirInto = "$projectDir/src/main/java/net/pantasystem/healthcycle"
+    def dirFrom = "$buildDir/kotlin/openapi-client/src/main/kotlin/net/pantasystem/todoandroidexample"
+    def dirInto = "$projectDir/src/main/java/net/pantasystem/todoandroidexample"
     doFirst {
         delete(file("$dirInto/api"))
     }
+    println(dirFrom)
+    println(dirInto)
 //    dependsOn("generate")
     from(dirFrom)
     into(dirInto)
@@ -119,8 +121,8 @@ task copy(type: Copy) {
 }
 task copyInvoker(type: Copy) {
     def dirInto = "$projectDir/src/main/java/org/openapitools/client"
-    from("$buildDir/kotlin/src/main/kotlin/org/openapitools/client")
-    into("$projectDir/src/main/java/net/pantasystem/healthcycle/api/client")
+    from("$buildDir/kotlin/openapi-client/src/main/kotlin/org/openapitools/client")
+    into("$projectDir/src/main/java/net/pantasystem/todoandroidexample/api/client")
     doFirst {
         delete(file(dirInto))
     }
