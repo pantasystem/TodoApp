@@ -21,6 +21,7 @@ import net.pantasystem.todoandroidexample.navigation.Routes
 import net.pantasystem.todoandroidexample.ui.account.AccountRoute
 import net.pantasystem.todoandroidexample.ui.task_detail.navigateTaskDetail
 import net.pantasystem.todoandroidexample.ui.task_detail.taskDetailNavGraph
+import net.pantasystem.todoandroidexample.ui.task_editor.navigateToTaskEditor
 import net.pantasystem.todoandroidexample.ui.task_editor.taskEditorNavGraph
 import net.pantasystem.todoandroidexample.ui.tasks.TaskListRoute
 
@@ -40,9 +41,6 @@ fun App(
     }
     Scaffold(
         Modifier.fillMaxSize(),
-        topBar = {
-
-        },
         bottomBar = {
             if (currentUiState is MainUiState.Authorized) {
                 BottomNav(navController = navController)
@@ -62,7 +60,7 @@ fun App(
                                 navController.navigateTaskDetail(it)
                             },
                             navigateToTaskEditor = {
-
+                                navController.navigateToTaskEditor()
                             }
                         )
                     }
@@ -72,7 +70,9 @@ fun App(
                     taskDetailNavGraph(onNavigateUp = {
                         navController.popBackStack()
                     })
-                    taskEditorNavGraph()
+                    taskEditorNavGraph(onNavigateUp = {
+                        navController.popBackStack()
+                    })
                 }
             }
             is MainUiState.Error -> {
