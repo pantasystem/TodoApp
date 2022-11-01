@@ -65,7 +65,7 @@ fun App(
                         )
                     }
                     composable(Routes.TopLevel.Account.route) {
-                        AccountRoute()
+                        AccountRoute(mainViewModel)
                     }
                     taskDetailNavGraph(onNavigateUp = {
                         navController.popBackStack()
