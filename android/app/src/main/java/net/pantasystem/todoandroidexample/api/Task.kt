@@ -21,7 +21,7 @@
 package net.pantasystem.todoandroidexample.api
 
 
-import com.squareup.moshi.Json
+import com.fasterxml.jackson.annotation.JsonProperty
 
 /**
  * 
@@ -37,25 +37,25 @@ import com.squareup.moshi.Json
 
 data class Task (
 
-    @Json(name = "id")
-    val id: kotlin.Int,
+    @field:JsonProperty("id")
+    val id: kotlin.Long,
 
-    @Json(name = "title")
+    @field:JsonProperty("title")
     val title: kotlin.String,
 
-    @Json(name = "accountId")
-    val accountId: kotlin.Int,
+    @field:JsonProperty("accountId")
+    val accountId: kotlin.Long,
 
-    @Json(name = "description")
+    @field:JsonProperty("description")
     val description: kotlin.String? = null,
 
-    @Json(name = "createdAt")
+    @field:JsonProperty("createdAt")
     val createdAt: java.time.OffsetDateTime? = null,
 
-    @Json(name = "updatedAt")
+    @field:JsonProperty("updatedAt")
     val updatedAt: java.time.OffsetDateTime? = null,
 
-    @Json(name = "completedAt")
+    @field:JsonProperty("completedAt")
     val completedAt: java.time.OffsetDateTime? = null
 
 )

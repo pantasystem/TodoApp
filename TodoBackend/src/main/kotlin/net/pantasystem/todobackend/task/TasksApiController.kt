@@ -30,10 +30,10 @@ class TaskApiController : TasksApi {
 
         return ResponseEntity.ok(taskRepository.findByAccount(account.id).map {
             TaskDTO(
-                id = it.id.toInt(),
+                id = it.id,
                 title = it.title,
                 description = it.description,
-                accountId = it.accountId.toInt(),
+                accountId = it.accountId,
                 completedAt = it.completedAt?.atOffset(ZoneOffset.UTC),
                 updatedAt = it.updatedAt?.atOffset(ZoneOffset.UTC),
                 createdAt = it.createdAt?.atOffset(ZoneOffset.UTC),
@@ -42,7 +42,7 @@ class TaskApiController : TasksApi {
     }
 
     @Authorize
-    override fun completeTask(taskId: Int): ResponseEntity<Unit> {
+    override fun completeTask(taskId: Long): ResponseEntity<Unit> {
         val account = RequestContextHolder.getRequestAttributes().getCurrentAccountOrFailure()
         val task = taskRepository.findOne(taskId.toLong())
 
@@ -68,7 +68,7 @@ class TaskApiController : TasksApi {
 
     @Authorize
 
-    override fun deleteTask(taskId: Int): ResponseEntity<Unit> {
+    override fun deleteTask(taskId: Long): ResponseEntity<Unit> {
         val account = RequestContextHolder.getRequestAttributes().getCurrentAccountOrFailure()
 
 
@@ -76,7 +76,7 @@ class TaskApiController : TasksApi {
     }
 
     @Authorize
-    override fun getTask(taskId: Int): ResponseEntity<TaskDTO> {
+    override fun getTask(taskId: Long): ResponseEntity<TaskDTO> {
         val account = RequestContextHolder.getRequestAttributes().getCurrentAccountOrFailure()
         val task = taskRepository.findOne(taskId.toLong())
         if (account.id != task.accountId) {
@@ -85,10 +85,10 @@ class TaskApiController : TasksApi {
                 .build()
         }
         return ResponseEntity.ok(TaskDTO(
-            id = task.id.toInt(),
+            id = task.id,
             title = task.title,
             description = task.description,
-            accountId = account.id.toInt(),
+            accountId = account.id,
             completedAt = task.completedAt?.atOffset(ZoneOffset.UTC),
             updatedAt = task.updatedAt?.atOffset(ZoneOffset.UTC),
             createdAt = task.createdAt?.atOffset(ZoneOffset.UTC),

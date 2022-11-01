@@ -29,12 +29,14 @@ import io.ktor.client.HttpClientConfig
 import io.ktor.client.request.forms.formData
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.http.ParametersBuilder
+import com.fasterxml.jackson.databind.ObjectMapper
 
     open class TasksApi(
     baseUrl: String = ApiClient.BASE_URL,
     httpClientEngine: HttpClientEngine? = null,
     httpClientConfig: ((HttpClientConfig<*>) -> Unit)? = null,
-    ) : ApiClient(baseUrl, httpClientEngine, httpClientConfig) {
+    jsonBlock: ObjectMapper.() -> Unit = ApiClient.JSON_DEFAULT,
+    ) : ApiClient(baseUrl, httpClientEngine, httpClientConfig, jsonBlock) {
 
         /**
         * Complete a Task
@@ -42,7 +44,7 @@ import io.ktor.http.ParametersBuilder
          * @param taskId task id 
          * @return void
         */
-        open suspend fun completeTask(taskId: kotlin.Int): HttpResponse<Unit> {
+        open suspend fun completeTask(taskId: kotlin.Long): HttpResponse<Unit> {
 
             val localVariableAuthNames = listOf<String>("ApiKeyAuth")
 
@@ -103,7 +105,7 @@ import io.ktor.http.ParametersBuilder
          * @param taskId task id 
          * @return void
         */
-        open suspend fun deleteTask(taskId: kotlin.Int): HttpResponse<Unit> {
+        open suspend fun deleteTask(taskId: kotlin.Long): HttpResponse<Unit> {
 
             val localVariableAuthNames = listOf<String>("ApiKeyAuth")
 
@@ -135,7 +137,7 @@ import io.ktor.http.ParametersBuilder
          * @return Task
         */
             @Suppress("UNCHECKED_CAST")
-        open suspend fun getTask(taskId: kotlin.Int): HttpResponse<Task> {
+        open suspend fun getTask(taskId: kotlin.Long): HttpResponse<Task> {
 
             val localVariableAuthNames = listOf<String>("ApiKeyAuth")
 
@@ -198,7 +200,7 @@ import io.ktor.http.ParametersBuilder
          * @param updateTaskRequest  
          * @return void
         */
-        open suspend fun updateTask(taskId: kotlin.Int, updateTaskRequest: UpdateTaskRequest): HttpResponse<Unit> {
+        open suspend fun updateTask(taskId: kotlin.Long, updateTaskRequest: UpdateTaskRequest): HttpResponse<Unit> {
 
             val localVariableAuthNames = listOf<String>("ApiKeyAuth")
 

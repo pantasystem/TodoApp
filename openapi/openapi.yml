@@ -104,6 +104,7 @@ paths:
           required: true
           schema:
             type: integer
+            format: 'int64'
       responses:
         '201':
           description: 'タスク完了成功時'
@@ -126,6 +127,7 @@ paths:
           required: true
           schema:
             type: integer
+            format: 'int64'
       responses:
         '200':
           description: 'タスク取得成功時'
@@ -151,6 +153,7 @@ paths:
           required: true
           schema:
             type: integer
+            format: 'int64'
       requestBody:
         required: true
         content:
@@ -182,6 +185,7 @@ paths:
           required: true
           schema:
             type: integer
+            format: 'int64'
       responses:
         '201':
           description: 'タスク削除成功時'
@@ -199,6 +203,7 @@ components:
       properties:
         id:
           type: integer
+          format: 'int64'
         name:
           type: string
 
@@ -228,6 +233,7 @@ components:
       properties:
         id:
           type: integer
+          format: 'int64'
         title:
           type: string
         description:
@@ -243,6 +249,7 @@ components:
           format: date-time
         accountId:
           type: integer
+          format: 'int64'
       example:
         id: 1
         title: 買い物に行く

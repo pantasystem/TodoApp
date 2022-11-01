@@ -4,7 +4,6 @@ import com.example.realworldkotlinspringbootjdbc.openapi.generated.controller.Ac
 import com.example.realworldkotlinspringbootjdbc.openapi.generated.model.Account as AccountDTO
 import com.example.realworldkotlinspringbootjdbc.openapi.generated.model.TokenWithAccount
 import net.pantasystem.todobackend.auth.Authorize
-import net.pantasystem.todobackend.auth.getCurrentAccount
 import net.pantasystem.todobackend.auth.getCurrentAccountOrFailure
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -23,7 +22,7 @@ class AccountApiController : AccountsApi {
     override fun getCurrentAccount(): ResponseEntity<AccountDTO> {
         return ResponseEntity.ok(
             RequestContextHolder.getRequestAttributes().getCurrentAccountOrFailure().let {
-                AccountDTO(it.id.toInt(), it.name)
+                AccountDTO(it.id, it.name)
             }
         )
     }
@@ -34,7 +33,7 @@ class AccountApiController : AccountsApi {
             TokenWithAccount(
                 token = account.token,
                 account = AccountDTO(
-                    id = account.id.toInt(),
+                    id = account.id,
                     name = account.name
                 )
             ),

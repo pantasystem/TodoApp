@@ -21,7 +21,7 @@
 package net.pantasystem.todoandroidexample.api
 
 
-import com.squareup.moshi.Json
+import com.fasterxml.jackson.annotation.JsonProperty
 
 /**
  * 
@@ -32,10 +32,10 @@ import com.squareup.moshi.Json
 
 data class Account (
 
-    @Json(name = "id")
-    val id: kotlin.Int,
+    @field:JsonProperty("id")
+    val id: kotlin.Long,
 
-    @Json(name = "name")
+    @field:JsonProperty("name")
     val name: kotlin.String? = null
 
 )

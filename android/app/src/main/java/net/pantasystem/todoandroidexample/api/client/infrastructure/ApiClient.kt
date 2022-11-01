@@ -20,6 +20,13 @@ import io.ktor.http.content.PartData
 import io.ktor.http.encodeURLQueryComponent
 import io.ktor.http.encodedPath
 import io.ktor.http.takeFrom
+import io.ktor.serialization.jackson.*
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.core.util.DefaultIndenter
+import com.fasterxml.jackson.core.util.DefaultPrettyPrinter
 import org.openapitools.client.auth.ApiKeyAuth
 import org.openapitools.client.auth.Authentication
 import org.openapitools.client.auth.HttpBasicAuth
@@ -31,11 +38,13 @@ open class ApiClient(
         private val baseUrl: String,
         httpClientEngine: HttpClientEngine?,
         httpClientConfig: ((HttpClientConfig<*>) -> Unit)? = null,
+        jsonBlock: ObjectMapper.() -> Unit = JSON_DEFAULT,
 ) {
 
     private val clientConfig: (HttpClientConfig<*>) -> Unit by lazy {
         {
             it.install(ContentNegotiation) {
+                  jackson { jsonBlock() }
             }
             httpClientConfig?.invoke(it)
         }
@@ -52,6 +61,14 @@ open class ApiClient(
 
     companion object {
           const val BASE_URL = "http://localhost"
+          val JSON_DEFAULT: ObjectMapper.() -> Unit = {
+            configure(SerializationFeature.INDENT_OUTPUT, true)
+            setDefaultPrettyPrinter(DefaultPrettyPrinter().apply {
+              indentArraysWith(DefaultPrettyPrinter.FixedSpaceIndenter.instance)
+              indentObjectsWith(DefaultIndenter("  ", "\n"))
+            })
+            registerModule(JavaTimeModule())
+          }
           protected val UNSAFE_HEADERS = listOf(HttpHeaders.ContentType)
     }
 

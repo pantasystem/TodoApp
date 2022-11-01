@@ -21,7 +21,7 @@
 package net.pantasystem.todoandroidexample.api
 
 
-import com.squareup.moshi.Json
+import com.fasterxml.jackson.annotation.JsonProperty
 
 /**
  * 
@@ -32,10 +32,10 @@ import com.squareup.moshi.Json
 
 data class CreateTaskRequest (
 
-    @Json(name = "title")
+    @field:JsonProperty("title")
     val title: kotlin.String,
 
-    @Json(name = "description")
+    @field:JsonProperty("description")
     val description: kotlin.String? = null
 
 )
