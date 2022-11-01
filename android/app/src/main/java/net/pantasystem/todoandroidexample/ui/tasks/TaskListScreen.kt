@@ -21,7 +21,9 @@ import net.pantasystem.todoandroidexample.api.Task
 
 @Composable
 fun TaskListRoute(
-    taskListViewModel: TaskListViewModel = hiltViewModel()
+    taskListViewModel: TaskListViewModel = hiltViewModel(),
+    navigateToTaskDetail: (Long) -> Unit,
+    navigateToTaskEditor: () -> Unit,
 ) {
     val tasks by taskListViewModel.tasks.collectAsState()
     LaunchedEffect(null) {
@@ -33,7 +35,10 @@ fun TaskListRoute(
                 taskListViewModel.toggleComplete(it.task)
             }
             is TaskListScreenAction.OnTaskCardClicked -> {
-
+                navigateToTaskDetail(it.task.id)
+            }
+            is TaskListScreenAction.OnCreateTaskFabClicked -> {
+                navigateToTaskEditor()
             }
         }
     })
@@ -50,7 +55,7 @@ fun TaskListScreen(
             TaskCard(
                 task = task,
                 onClick = {
-
+                    onAction(TaskListScreenAction.OnTaskCardClicked(task))
                 },
                 onToggle = {
                     onAction(TaskListScreenAction.OnCompleteCheckboxToggled(task, it))
@@ -115,4 +120,5 @@ private fun CircleCheckbox(modifier: Modifier = Modifier, selected: Boolean, ena
 sealed interface TaskListScreenAction {
     data class OnTaskCardClicked(val task: Task) : TaskListScreenAction
     data class OnCompleteCheckboxToggled(val task: Task, val nextValue: Boolean) : TaskListScreenAction
+    object OnCreateTaskFabClicked : TaskListScreenAction
 }

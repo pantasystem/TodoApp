@@ -5,7 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import net.pantasystem.todoandroidexample.navigation.Routes
 
-fun NavGraphBuilder.taskEditorNavigation() {
+fun NavGraphBuilder.taskEditorNavGraph() {
     composable(Routes.TaskEditor.route) {
         TaskEditorRoute()
     }

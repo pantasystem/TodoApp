@@ -18,8 +18,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import net.pantasystem.todoandroidexample.navigation.Routes
 import net.pantasystem.todoandroidexample.ui.account.AccountRoute
-import net.pantasystem.todoandroidexample.ui.task_detail.taskDetailNavigation
-import net.pantasystem.todoandroidexample.ui.task_editor.taskEditorNavigation
+import net.pantasystem.todoandroidexample.ui.task_detail.navigateTaskDetail
+import net.pantasystem.todoandroidexample.ui.task_detail.taskDetailNavGraph
+import net.pantasystem.todoandroidexample.ui.task_editor.taskEditorNavGraph
 import net.pantasystem.todoandroidexample.ui.tasks.TaskListRoute
 
 val items = listOf(
@@ -54,13 +55,22 @@ fun App(
                     startDestination = Routes.TopLevel.Home.route
                 ) {
                     composable(Routes.TopLevel.Home.route) {
-                        TaskListRoute()
+                        TaskListRoute(
+                            navigateToTaskDetail = {
+                                navController.navigateTaskDetail(it)
+                            },
+                            navigateToTaskEditor = {
+
+                            }
+                        )
                     }
                     composable(Routes.TopLevel.Account.route) {
                         AccountRoute()
                     }
-                    taskDetailNavigation()
-                    taskEditorNavigation()
+                    taskDetailNavGraph(onNavigateUp = {
+                        navController.popBackStack()
+                    })
+                    taskEditorNavGraph()
                 }
             }
             is MainUiState.Error -> {
