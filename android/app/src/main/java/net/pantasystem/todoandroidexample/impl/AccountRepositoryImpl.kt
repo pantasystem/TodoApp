@@ -19,7 +19,7 @@ class AccountRepositoryImpl @Inject constructor(
 
     override suspend fun findSelf(): Result<Account> = runCatching {
         apiProvider.getAccountApi().apply {
-            setAccessToken(authRepository.getToken() ?: "")
+            setBearerToken(authRepository.getToken() ?: "")
         }.getCurrentAccount().body()
     }
 

@@ -56,14 +56,19 @@ class TaskApiController : TasksApi {
         return ResponseEntity.ok(Unit)
     }
     @Authorize
-    override fun createTask(createTaskRequest: CreateTaskRequest): ResponseEntity<Unit> {
+    override fun createTask(createTaskRequest: CreateTaskRequest): ResponseEntity<TaskDTO> {
         val account = RequestContextHolder.getRequestAttributes().getCurrentAccountOrFailure()
-        taskRepository.create(Task(
+        val task = taskRepository.create(Task(
             title = createTaskRequest.title,
             description = createTaskRequest.description,
             accountId = account.id
         ))
-        return ResponseEntity.ok(Unit)
+        return ResponseEntity.ok(TaskDTO(
+            id = task.id,
+            accountId = task.accountId,
+            title = task.title,
+            description = task.description
+        ))
     }
 
     @Authorize

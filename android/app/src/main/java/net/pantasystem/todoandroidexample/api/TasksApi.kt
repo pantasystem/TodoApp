@@ -73,9 +73,10 @@ import com.fasterxml.jackson.databind.ObjectMapper
         * Create a Task
         * 
          * @param createTaskRequest  
-         * @return void
+         * @return Task
         */
-        open suspend fun createTask(createTaskRequest: CreateTaskRequest): HttpResponse<Unit> {
+            @Suppress("UNCHECKED_CAST")
+        open suspend fun createTask(createTaskRequest: CreateTaskRequest): HttpResponse<Task> {
 
             val localVariableAuthNames = listOf<String>("ApiKeyAuth")
 

@@ -14,13 +14,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import dagger.hilt.android.AndroidEntryPoint
 import net.pantasystem.todoandroidexample.domain.AccountRepository
+import net.pantasystem.todoandroidexample.domain.TaskRepository
 import net.pantasystem.todoandroidexample.ui.theme.TodoAndroidExampleTheme
+import java.util.Random
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @Inject
     lateinit var accountRepository: AccountRepository
+
+    @Inject
+    lateinit var taskRepository: TaskRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +35,18 @@ class MainActivity : ComponentActivity() {
                     Log.e("MainActivity", "register処理失敗", it)
                 }.onSuccess {
                     Log.d("MainActivity", "register処理成功:$it")
+                }.mapCatching {
+                    (0 until 10).map {
+                        taskRepository.create(
+                            title = "hogehoge:${java.util.Random().nextInt().toString()}",
+                        ).getOrThrow()
+                    }
+                    taskRepository.findTasks().getOrThrow()
+                }.onSuccess {
+                    Log.d("MainActivity", "タスク作成成功:$it")
+
+                }.onFailure {
+                    Log.e("MainActivity", "create task処理失敗", it)
                 }
             }
             TodoAndroidExampleTheme {
