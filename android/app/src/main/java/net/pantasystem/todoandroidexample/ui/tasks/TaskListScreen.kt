@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -47,18 +46,11 @@ fun TaskListRoute(
         onCreateTaskFabClicked = {
             navigateToTaskEditor()
         },
-        onAction = {
-            when (it) {
-                is TaskListScreenAction.OnCompleteCheckboxToggled -> {
-                    taskListViewModel.toggleComplete(it.task)
-                }
-                is TaskListScreenAction.OnTaskCardClicked -> {
-                    navigateToTaskDetail(it.task.id)
-                }
-                is TaskListScreenAction.OnCreateTaskFabClicked -> {
-                    navigateToTaskEditor()
-                }
-            }
+        onCompleteCheckboxToggled = { task, _ ->
+            taskListViewModel.toggleComplete(task)
+        },
+        onTaskCardClicked = { task ->
+            navigateToTaskDetail(task.id)
         },
     )
 }
@@ -67,7 +59,8 @@ fun TaskListRoute(
 fun TaskListScreen(
     modifier: Modifier,
     uiState: TasksUiState,
-    onAction: (TaskListScreenAction) -> Unit,
+    onCompleteCheckboxToggled: (Task, Boolean) -> Unit,
+    onTaskCardClicked: (Task) -> Unit,
     onSearchButtonClicked: () -> Unit,
     onSearchWordChanged: (String) -> Unit,
     onCreateTaskFabClicked: () -> Unit,
@@ -88,20 +81,20 @@ fun TaskListScreen(
             }
         }
 
-    ) {
+    ) { paddingValues ->
         LazyColumn(
             Modifier
                 .fillMaxSize()
-                .padding(it)
+                .padding(paddingValues)
         ) {
             items(uiState.filteredTasks, key = { it.id }) { task ->
                 TaskCard(
                     task = task,
                     onClick = {
-                        onAction(TaskListScreenAction.OnTaskCardClicked(task))
+                        onTaskCardClicked(task)
                     },
                     onToggle = {
-                        onAction(TaskListScreenAction.OnCompleteCheckboxToggled(task, it))
+                        onCompleteCheckboxToggled(task, it)
                     }
                 )
             }
@@ -217,10 +210,3 @@ fun TaskListTopAppBar(
     }
 }
 
-sealed interface TaskListScreenAction {
-    data class OnTaskCardClicked(val task: Task) : TaskListScreenAction
-    data class OnCompleteCheckboxToggled(val task: Task, val nextValue: Boolean) :
-        TaskListScreenAction
-
-    object OnCreateTaskFabClicked : TaskListScreenAction
-}
