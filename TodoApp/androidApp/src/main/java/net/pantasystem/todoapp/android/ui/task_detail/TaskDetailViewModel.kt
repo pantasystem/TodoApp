@@ -10,12 +10,13 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import net.pantasystem.todoapp.api.Task
+import net.pantasystem.todoapp.domain.LoadOneTaskUseCase
 import net.pantasystem.todoapp.repository.TaskRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class TaskDetailViewModel @Inject constructor(
-    private val taskRepository: TaskRepository,
+    private val loadOneTaskUseCase: LoadOneTaskUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -32,7 +33,7 @@ class TaskDetailViewModel @Inject constructor(
     fun load() {
         viewModelScope.launch {
             _isLoading.value = true
-            taskRepository.findOne(
+            loadOneTaskUseCase(
                 taskArgs.taskId
             ).onSuccess {
                 _error.value = null

@@ -9,12 +9,13 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import net.pantasystem.todoapp.repository.TaskRepository
+import net.pantasystem.todoapp.api.Task
+import net.pantasystem.todoapp.domain.CreateTaskUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class TaskEditorViewModel @Inject constructor(
-    val taskRepository: TaskRepository,
+    val createTaskUseCase: CreateTaskUseCase
 ) : ViewModel() {
 
     var title by mutableStateOf("")
@@ -23,8 +24,8 @@ class TaskEditorViewModel @Inject constructor(
     var description by mutableStateOf("")
         private set
 
-    private val _saveResult = MutableStateFlow<Result<Unit>?>(null)
-    val saveResult: StateFlow<Result<Unit>?> = _saveResult
+    private val _saveResult = MutableStateFlow<Result<List<Task>>?>(null)
+    val saveResult: StateFlow<Result<List<Task>>?> = _saveResult
 
 
     private val formState = combine(
@@ -39,8 +40,8 @@ class TaskEditorViewModel @Inject constructor(
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), TaskEditorFormState())
 
     private val validationResult = formState.map {
-        ValidationResult.create(it.title, it.description)
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), ValidationResult())
+        EditTaskValidationResult.create(it.title, it.description)
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), EditTaskValidationResult())
 
     val uiState = combine(formState, validationResult) { formState, validation ->
         TaskEditorUiState(
@@ -61,8 +62,9 @@ class TaskEditorViewModel @Inject constructor(
 
     fun onSave() {
         viewModelScope.launch {
-            if (ValidationResult.create(title, description).isOk) {
-                val saveResult = taskRepository.create(
+            if (EditTaskValidationResult.create(title, description).isOk) {
+                createTaskUseCase(title, description)
+                val saveResult = createTaskUseCase(
                     title = title,
                     description = description,
                 )
@@ -79,18 +81,18 @@ data class TaskEditorFormState(
 
 data class TaskEditorUiState(
     val formState: TaskEditorFormState = TaskEditorFormState(),
-    val validationResult: ValidationResult = ValidationResult(),
+    val validationResult: EditTaskValidationResult = EditTaskValidationResult(),
 )
 
-data class ValidationResult(
+data class EditTaskValidationResult(
     val titleErrorMessage: String? = null,
     val descriptionErrorMessage: String? = null,
 ) {
     val isOk: Boolean = titleErrorMessage == null && descriptionErrorMessage == null
 
     companion object {
-        fun create(title: String, description: String): ValidationResult {
-            return ValidationResult(
+        fun create(title: String, description: String): EditTaskValidationResult {
+            return EditTaskValidationResult(
                 titleErrorMessage = if (title.isEmpty()) {
                     "1文字以上30文字未満の範囲で入力してください"
                 } else if (title.codePointCount(0, title.length) > 30) {
