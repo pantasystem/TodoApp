@@ -7,12 +7,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import net.pantasystem.todoapp.api.Account
-import net.pantasystem.todoapp.repository.AccountRepository
+import net.pantasystem.todoapp.domain.LoadAccountUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val accountRepository: AccountRepository
+    private val loadAccountUseCase: LoadAccountUseCase
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow<MainUiState>(MainUiState.Initializing)
@@ -21,9 +21,7 @@ class MainViewModel @Inject constructor(
 
     fun loadInit() {
         viewModelScope.launch {
-            accountRepository.findSelf().onFailure {
-                accountRepository.register().getOrThrow()
-            }.onSuccess {
+            loadAccountUseCase().onSuccess {
                 _uiState.value = MainUiState.Authorized(it)
             }.onFailure {
                 _uiState.value = MainUiState.Error(it)

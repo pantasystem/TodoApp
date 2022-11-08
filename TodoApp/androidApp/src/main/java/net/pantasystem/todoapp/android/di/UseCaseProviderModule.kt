@@ -4,10 +4,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import net.pantasystem.todoapp.domain.CreateTaskUseCase
-import net.pantasystem.todoapp.domain.LoadOneTaskUseCase
-import net.pantasystem.todoapp.domain.LoadTasksUseCase
-import net.pantasystem.todoapp.domain.ToggleCompleteTaskUseCase
+import net.pantasystem.todoapp.domain.*
+import net.pantasystem.todoapp.repository.AccountRepository
 import net.pantasystem.todoapp.repository.TaskRepository
 import javax.inject.Singleton
 
@@ -41,5 +39,11 @@ object UseCaseProviderModule {
     @Singleton
     fun provideLoadOneTaskUseCase(taskRepository: TaskRepository): LoadOneTaskUseCase {
         return LoadOneTaskUseCase(taskRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideLoadAccountUseCase(accountRepository: AccountRepository): LoadAccountUseCase {
+        return LoadAccountUseCase(accountRepository)
     }
 }

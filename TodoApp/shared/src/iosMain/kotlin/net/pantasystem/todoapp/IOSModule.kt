@@ -1,9 +1,6 @@
 package net.pantasystem.todoapp
 
-import net.pantasystem.todoapp.domain.CreateTaskUseCase
-import net.pantasystem.todoapp.domain.LoadOneTaskUseCase
-import net.pantasystem.todoapp.domain.LoadTasksUseCase
-import net.pantasystem.todoapp.domain.ToggleCompleteTaskUseCase
+import net.pantasystem.todoapp.domain.*
 import net.pantasystem.todoapp.impl.AccountRepositoryImpl
 import net.pantasystem.todoapp.impl.AuthRepositoryImpl
 import net.pantasystem.todoapp.impl.TaskRepositoryImpl
@@ -46,5 +43,9 @@ class IOSModule {
 
     fun provideToggleCompleteTaskUseCase(): ToggleCompleteTaskUseCase {
         return ToggleCompleteTaskUseCase(provideTaskRepository())
+    }
+
+    fun provideLoadAccountUseCase(): LoadAccountUseCase {
+        return LoadAccountUseCase(provideAccountRepository())
     }
 }

@@ -1,5 +1,3 @@
-import de.undercouch.gradle.tasks.download.org.apache.http.config.ConnectionConfig
-
 plugins {
     kotlin("multiplatform")
     kotlin("native.cocoapods")
@@ -10,7 +8,7 @@ plugins {
 }
 val ktor_version = "2.0.3"
 val serialization_version = "1.3.3"
-val coroutines_version = "1.6.3"
+val coroutines_version = "1.6.4"
 
 
 kotlin {
