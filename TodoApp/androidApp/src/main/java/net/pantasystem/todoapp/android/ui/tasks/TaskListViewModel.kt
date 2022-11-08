@@ -7,12 +7,15 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import net.pantasystem.todoapp.api.Task
+import net.pantasystem.todoapp.domain.LoadTasksUseCase
+import net.pantasystem.todoapp.domain.ToggleCompleteTaskUseCase
 import net.pantasystem.todoapp.repository.TaskRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class TaskListViewModel @Inject constructor(
-    private val taskRepository: TaskRepository
+    private val toggleCompleteTaskUseCase: ToggleCompleteTaskUseCase,
+    private val loadTasksUseCase: LoadTasksUseCase
 ): ViewModel() {
 
     private val _tasks = MutableStateFlow<List<Task>>(emptyList())
@@ -38,7 +41,7 @@ class TaskListViewModel @Inject constructor(
     }
     fun loadTasks() {
         viewModelScope.launch {
-            taskRepository.findTasks().onSuccess {
+            loadTasksUseCase().onSuccess {
                 _tasks.value = it
             }.onFailure {
                 _errors.tryEmit(it)
@@ -48,14 +51,10 @@ class TaskListViewModel @Inject constructor(
 
     fun toggleComplete(task: Task) {
         viewModelScope.launch {
-            if (task.completedAt == null) {
-                taskRepository.completeTask(task.id)
-            } else {
-                taskRepository.uncompleteTask(task.id)
-            }.onSuccess {
-                loadTasks()
-            }.onFailure {
+            toggleCompleteTaskUseCase(task).onFailure {
                 _errors.tryEmit(it)
+            }.onSuccess {
+                _tasks.value = it
             }
         }
     }
