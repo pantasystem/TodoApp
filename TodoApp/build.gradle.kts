@@ -4,6 +4,18 @@ plugins {
     id("com.android.library").version("7.3.0").apply(false)
     kotlin("android").version("1.7.10").apply(false)
     kotlin("multiplatform").version("1.7.10").apply(false)
+    id("com.google.dagger.hilt.android").version("2.44").apply(false)
+}
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10")
+        classpath("com.codingfeline.buildkonfig:buildkonfig-gradle-plugin:0.13.3")
+    }
 }
 
 tasks.register("clean", Delete::class) {

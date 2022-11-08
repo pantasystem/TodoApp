@@ -1,9 +1,12 @@
+import de.undercouch.gradle.tasks.download.org.apache.http.config.ConnectionConfig
+
 plugins {
     kotlin("multiplatform")
     kotlin("native.cocoapods")
     id("com.android.library")
     id("org.openapi.generator") version "6.2.0"
-
+    id("com.codingfeline.buildkonfig")
+    kotlin("plugin.serialization") version "1.7.20"
 }
 val ktor_version = "2.0.3"
 val serialization_version = "1.3.3"
@@ -32,6 +35,7 @@ kotlin {
             dependencies {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$serialization_version")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json")
                 api("io.ktor:ktor-client-core:$ktor_version")
                 api("io.ktor:ktor-client-serialization:$ktor_version")
                 api("io.ktor:ktor-client-content-negotiation:$ktor_version")
@@ -67,14 +71,15 @@ kotlin {
             iosSimulatorArm64Test.dependsOn(this)
         }
     }
+
 }
 
 android {
     namespace = "net.pantasystem.todoapp"
-    compileSdk = 32
+    compileSdk = 33
     defaultConfig {
         minSdk = 21
-        targetSdk = 32
+        targetSdk = 33
     }
 }
 task<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("generate") {
@@ -114,4 +119,14 @@ task<Copy>("copyInvoker") {
 
 task("buildApi") {
     dependsOn("generate", "copyApi", "copyInvoker")
+}
+buildkonfig {
+    packageName = "net.pantasystem.todoapp"
+    // objectName = "YourAwesomeConfig"
+    // exposeObjectWithName = "YourAwesomePublicConfig"
+
+    defaultConfigs {
+//        buildConfigField(STRING, "name", "value")
+        buildConfigField(com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING, "baseUrl", "http://10.0.2.2:8080")
+    }
 }
