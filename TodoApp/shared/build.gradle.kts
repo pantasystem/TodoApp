@@ -5,6 +5,10 @@ plugins {
     id("org.openapi.generator") version "6.2.0"
 
 }
+val ktor_version = "2.0.3"
+val serialization_version = "1.3.3"
+val coroutines_version = "1.6.3"
+
 
 kotlin {
     android()
@@ -24,7 +28,16 @@ kotlin {
     }
     
     sourceSets {
-        val commonMain by getting
+        val commonMain by getting {
+            dependencies {
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$serialization_version")
+                api("io.ktor:ktor-client-core:$ktor_version")
+                api("io.ktor:ktor-client-serialization:$ktor_version")
+                api("io.ktor:ktor-client-content-negotiation:$ktor_version")
+                api("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
+            }
+        }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
@@ -40,6 +53,9 @@ kotlin {
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
+            dependencies {
+                api("io.ktor:ktor-client-ios:$ktor_version")
+            }
         }
         val iosX64Test by getting
         val iosArm64Test by getting
@@ -78,4 +94,24 @@ task<org.openapitools.generator.gradle.plugin.tasks.GenerateTask>("generate") {
     library.set("multiplatform")
     additionalProperties.put("useCoroutines", "true")
 
+}
+
+task<Copy>("copyApi") {
+    val dirFrom = "$buildDir/kotlin/src/commonMain/kotlin/net/pantasystem/todoapp/api"
+    val dirInto = "$projectDir/src/commonMain/kotlin/net/pantasystem/todoapp/api/"
+    println("dirInto:$dirInto")
+    from(dirFrom)
+    into(dirInto)
+}
+
+task<Copy>("copyInvoker") {
+    val dirFrom = "$buildDir/kotlin/src/commonMain/kotlin/org/openapitools/client"
+    val dirInto = "$projectDir/src/commonMain/kotlin/net/pantasystem/todoapp/api/client"
+    println("dirInto:$dirInto")
+    from(dirFrom)
+    into(dirInto)
+}
+
+task("buildApi") {
+    dependsOn("generate", "copyApi", "copyInvoker")
 }
