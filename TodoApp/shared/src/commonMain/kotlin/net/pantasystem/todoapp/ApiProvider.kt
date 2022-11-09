@@ -30,14 +30,10 @@ class ApiProvider {
 
     }
     fun getTasksApi(): TasksApi {
-
-        return TasksApi(baseUrl = BuildKonfig.baseUrl, httpClientConfig = httpClientConfig).apply {
-
-        }
+        return TasksApi(baseUrl = BuildKonfig.baseUrl, httpClientConfig = httpClientConfig)
     }
 
     fun getAccountApi(): AccountsApi {
-
         return AccountsApi(baseUrl = BuildKonfig.baseUrl, httpClientConfig = httpClientConfig)
     }
 }
