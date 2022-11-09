@@ -5,11 +5,13 @@ import net.pantasystem.todoapp.repository.TaskRepository
 
 class CreateTaskUseCase(
     val taskRepository: TaskRepository
-) {
+) : UseCaseReturns<CreateTask, List<Task>>{
 
-    suspend operator fun invoke(title: String, description: String?): Result<List<Task>> {
-        return taskRepository.create(title, description).mapCatching {
+    override suspend operator fun invoke(args: CreateTask): List<Task> {
+        return taskRepository.create(args.title, args.description).mapCatching {
             taskRepository.findTasks().getOrThrow()
-        }
+        }.getOrThrow()
     }
 }
+
+data class CreateTask(val title: String, val description: String?)

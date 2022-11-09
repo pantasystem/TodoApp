@@ -5,15 +5,14 @@ import net.pantasystem.todoapp.repository.TaskRepository
 
 class ToggleCompleteTaskUseCase(
     val taskRepository: TaskRepository
-) {
-
-    suspend operator fun invoke(task: Task): Result<List<Task>> {
-        return if (task.completedAt == null) {
-            taskRepository.completeTask(task.id)
+) : UseCaseReturns<Task, List<Task>> {
+    override suspend fun invoke(args: Task): List<Task> {
+        return if (args.completedAt == null) {
+            taskRepository.completeTask(args.id)
         } else {
-            taskRepository.uncompleteTask(task.id)
+            taskRepository.uncompleteTask(args.id)
         }.mapCatching {
             taskRepository.findTasks().getOrThrow()
-        }
+        }.getOrThrow()
     }
 }

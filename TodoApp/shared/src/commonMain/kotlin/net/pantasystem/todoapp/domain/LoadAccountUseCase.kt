@@ -6,14 +6,16 @@ import net.pantasystem.todoapp.repository.AccountRepository
 
 class LoadAccountUseCase(
     val accountRepository: AccountRepository
-) {
+) : UseCase0Returns<Account> {
 
-    suspend operator fun invoke(): Result<Account> = runCatching {
-        try {
-            accountRepository.findSelf().getOrThrow()
-        } catch (e: UnauthorizedError) {
-            accountRepository.register().getOrThrow().account
-        }
 
+    override suspend fun invoke(): Account {
+        return runCatching {
+            try {
+                accountRepository.findSelf().getOrThrow()
+            } catch (e: UnauthorizedError) {
+                accountRepository.register().getOrThrow().account
+            }
+        }.getOrThrow()
     }
 }

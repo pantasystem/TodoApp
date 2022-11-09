@@ -5,9 +5,9 @@ import net.pantasystem.todoapp.repository.TaskRepository
 
 class LoadTasksUseCase(
     val taskRepository: TaskRepository
-) {
+) : UseCase0Returns<List<Task>> {
 
-    suspend operator fun invoke(): Result<List<Task>> {
-        return taskRepository.findTasks()
+    override suspend fun invoke(): List<Task> {
+        return taskRepository.findTasks().getOrThrow()
     }
 }

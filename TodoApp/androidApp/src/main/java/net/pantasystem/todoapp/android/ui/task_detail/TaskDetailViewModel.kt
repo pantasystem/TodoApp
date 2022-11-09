@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import net.pantasystem.todoapp.api.Task
 import net.pantasystem.todoapp.domain.LoadOneTaskUseCase
+import net.pantasystem.todoapp.domain.asResult
 import net.pantasystem.todoapp.repository.TaskRepository
 import javax.inject.Inject
 
@@ -33,9 +34,7 @@ class TaskDetailViewModel @Inject constructor(
     fun load() {
         viewModelScope.launch {
             _isLoading.value = true
-            loadOneTaskUseCase(
-                taskArgs.taskId
-            ).onSuccess {
+            loadOneTaskUseCase.asResult(taskArgs.taskId).onSuccess {
                 _error.value = null
                 _task.value = it
             }.onFailure {

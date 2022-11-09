@@ -3,9 +3,19 @@ import shared
 
 struct ContentView: View {
 	
-
+    @ObservedObject var appViewModel: AppViewModel
+    init() {
+        self.appViewModel = AppViewModel()
+        self.appViewModel.load()
+    }
 	var body: some View {
-        AppView()
+        if appViewModel.isLoading && appViewModel.account == nil {
+            ProgressView("")
+        } else if appViewModel.isFailure && appViewModel.account == nil {
+            Text("Error:\(appViewModel.error!.localizedDescription)")
+        } else if appViewModel.account != nil {
+            Text("Success:")
+        }
         
             
 	}

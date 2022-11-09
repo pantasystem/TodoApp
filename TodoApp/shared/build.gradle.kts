@@ -5,6 +5,7 @@ plugins {
     id("org.openapi.generator") version "6.2.0"
     id("com.codingfeline.buildkonfig")
     kotlin("plugin.serialization") version "1.7.20"
+    id("com.rickclephas.kmp.nativecoroutines").version("0.13.1")
 }
 val ktor_version = "2.0.3"
 val serialization_version = "1.3.3"
@@ -56,7 +57,8 @@ kotlin {
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
             dependencies {
-                api("io.ktor:ktor-client-ios:$ktor_version")
+//                api("io.ktor:ktor-client-ios:$ktor_version")
+                implementation("io.ktor:ktor-client-darwin:$ktor_version")
             }
         }
         val iosX64Test by getting
@@ -123,8 +125,17 @@ buildkonfig {
     // objectName = "YourAwesomeConfig"
     // exposeObjectWithName = "YourAwesomePublicConfig"
 
+
+    targetConfigs {
+
+
+        create("ios") {
+            buildConfigField(com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING, "baseUrl", "http://localhost:8080")
+        }
+    }
     defaultConfigs {
 //        buildConfigField(STRING, "name", "value")
         buildConfigField(com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING, "baseUrl", "http://10.0.2.2:8080")
+
     }
 }

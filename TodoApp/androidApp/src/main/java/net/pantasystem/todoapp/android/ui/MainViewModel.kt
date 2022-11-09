@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import net.pantasystem.todoapp.api.Account
 import net.pantasystem.todoapp.domain.LoadAccountUseCase
+import net.pantasystem.todoapp.domain.asResult
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,7 +22,7 @@ class MainViewModel @Inject constructor(
 
     fun loadInit() {
         viewModelScope.launch {
-            loadAccountUseCase().onSuccess {
+            loadAccountUseCase.asResult().onSuccess {
                 _uiState.value = MainUiState.Authorized(it)
             }.onFailure {
                 _uiState.value = MainUiState.Error(it)

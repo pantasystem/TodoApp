@@ -10,7 +10,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import net.pantasystem.todoapp.api.Task
+import net.pantasystem.todoapp.domain.CreateTask
 import net.pantasystem.todoapp.domain.CreateTaskUseCase
+import net.pantasystem.todoapp.domain.asResult
 import javax.inject.Inject
 
 @HiltViewModel
@@ -63,10 +65,11 @@ class TaskEditorViewModel @Inject constructor(
     fun onSave() {
         viewModelScope.launch {
             if (EditTaskValidationResult.create(title, description).isOk) {
-                createTaskUseCase(title, description)
-                val saveResult = createTaskUseCase(
-                    title = title,
-                    description = description,
+                val saveResult = createTaskUseCase.asResult(
+                    CreateTask(
+                        title = title,
+                        description = description,
+                    )
                 )
                 _saveResult.value = saveResult
             }

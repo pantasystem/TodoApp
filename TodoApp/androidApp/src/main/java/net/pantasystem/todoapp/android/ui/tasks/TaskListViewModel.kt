@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 import net.pantasystem.todoapp.api.Task
 import net.pantasystem.todoapp.domain.LoadTasksUseCase
 import net.pantasystem.todoapp.domain.ToggleCompleteTaskUseCase
+import net.pantasystem.todoapp.domain.asResult
 import net.pantasystem.todoapp.repository.TaskRepository
 import javax.inject.Inject
 
@@ -41,7 +42,7 @@ class TaskListViewModel @Inject constructor(
     }
     fun loadTasks() {
         viewModelScope.launch {
-            loadTasksUseCase().onSuccess {
+            loadTasksUseCase.asResult().onSuccess {
                 _tasks.value = it
             }.onFailure {
                 _errors.tryEmit(it)
@@ -51,7 +52,7 @@ class TaskListViewModel @Inject constructor(
 
     fun toggleComplete(task: Task) {
         viewModelScope.launch {
-            toggleCompleteTaskUseCase(task).onFailure {
+            toggleCompleteTaskUseCase.asResult(task).onFailure {
                 _errors.tryEmit(it)
             }.onSuccess {
                 _tasks.value = it
