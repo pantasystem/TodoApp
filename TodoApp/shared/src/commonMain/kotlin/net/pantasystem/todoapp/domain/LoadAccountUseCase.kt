@@ -13,7 +13,7 @@ class LoadAccountUseCase(
         return runCatching {
             try {
                 accountRepository.findSelf().getOrThrow()
-            } catch (e: UnauthorizedError) {
+            } catch (e: Exception) {
                 accountRepository.register().getOrThrow().account
             }
         }.getOrThrow()

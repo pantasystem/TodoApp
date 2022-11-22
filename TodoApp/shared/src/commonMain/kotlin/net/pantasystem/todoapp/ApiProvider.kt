@@ -17,7 +17,11 @@ class ApiProvider {
             this.contentType(ContentType.Application.Json)
         }
         it.HttpResponseValidator {
+            validateResponse {
+                println("status code:${it.status}")
+            }
             handleResponseExceptionWithRequest { exception, request ->
+                println("error:$exception")
                 val clientException = exception as? ClientRequestException ?: return@handleResponseExceptionWithRequest
                 val exceptionResponse = clientException.response
                 if (exceptionResponse.status == HttpStatusCode.Unauthorized) {

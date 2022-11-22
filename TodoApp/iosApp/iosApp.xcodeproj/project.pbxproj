@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,6 +11,9 @@
 		058557D9273AAEEB004C7B11 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */; };
 		2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152FB032600AC8F00CF470E /* iOSApp.swift */; };
 		7555FF83242A565900829871 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* ContentView.swift */; };
+		8D293F20292C927700B46A44 /* TaskListScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D293F1F292C927700B46A44 /* TaskListScreen.swift */; };
+		8D293F22292C9AF200B46A44 /* TaskEditorScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D293F21292C9AF200B46A44 /* TaskEditorScreen.swift */; };
+		8D293F24292C9BBD00B46A44 /* TaskEditorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D293F23292C9BBD00B46A44 /* TaskEditorViewModel.swift */; };
 		8D7A5764291A39D40098FEF4 /* TasksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7A5763291A39D40098FEF4 /* TasksViewModel.swift */; };
 		8D7A5766291A3DE30098FEF4 /* AppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7A5765291A3DE30098FEF4 /* AppViewModel.swift */; };
 		FE6D57015D0977F3398B9EFB /* Pods_iosApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 98F9B8A6788E3A1B42281B8B /* Pods_iosApp.framework */; };
@@ -24,6 +27,9 @@
 		7555FF7B242A565900829871 /* iosApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iosApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7555FF82242A565900829871 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7555FF8C242A565B00829871 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8D293F1F292C927700B46A44 /* TaskListScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskListScreen.swift; sourceTree = "<group>"; };
+		8D293F21292C9AF200B46A44 /* TaskEditorScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskEditorScreen.swift; sourceTree = "<group>"; };
+		8D293F23292C9BBD00B46A44 /* TaskEditorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskEditorViewModel.swift; sourceTree = "<group>"; };
 		8D7A5763291A39D40098FEF4 /* TasksViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TasksViewModel.swift; sourceTree = "<group>"; };
 		8D7A5765291A3DE30098FEF4 /* AppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewModel.swift; sourceTree = "<group>"; };
 		98F9B8A6788E3A1B42281B8B /* Pods_iosApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iosApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -87,6 +93,9 @@
 				058557D7273AAEEB004C7B11 /* Preview Content */,
 				8D7A5763291A39D40098FEF4 /* TasksViewModel.swift */,
 				8D7A5765291A3DE30098FEF4 /* AppViewModel.swift */,
+				8D293F1F292C927700B46A44 /* TaskListScreen.swift */,
+				8D293F21292C9AF200B46A44 /* TaskEditorScreen.swift */,
+				8D293F23292C9BBD00B46A44 /* TaskEditorViewModel.swift */,
 			);
 			path = iosApp;
 			sourceTree = "<group>";
@@ -214,8 +223,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */,
+				8D293F22292C9AF200B46A44 /* TaskEditorScreen.swift in Sources */,
+				8D293F24292C9BBD00B46A44 /* TaskEditorViewModel.swift in Sources */,
 				8D7A5764291A39D40098FEF4 /* TasksViewModel.swift in Sources */,
 				8D7A5766291A3DE30098FEF4 /* AppViewModel.swift in Sources */,
+				8D293F20292C927700B46A44 /* TaskListScreen.swift in Sources */,
 				7555FF83242A565900829871 /* ContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

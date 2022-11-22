@@ -14,7 +14,7 @@ struct ContentView: View {
         } else if appViewModel.isFailure && appViewModel.account == nil {
             Text("Error:\(appViewModel.error!.localizedDescription)")
         } else if appViewModel.account != nil {
-            Text("Success:")
+            TaskListScreen()
         }
         
             

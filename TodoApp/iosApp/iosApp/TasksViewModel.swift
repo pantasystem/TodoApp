@@ -20,7 +20,7 @@ class TasksViewModel : ObservableObject {
     func load() {
         let usecase = IOSModule().provideLoadTasksUseCase()
         let future = createFuture(for: usecase.invokeNative())
-        future.sink(receiveCompletion: {e in
+        future.receive(on: RunLoop.main).sink(receiveCompletion: {e in
             switch e {
             
             case .failure(let e):
@@ -34,4 +34,10 @@ class TasksViewModel : ObservableObject {
         }).store(in: &cancellables)
     }
     
+    func create(title: String, description: String) {
+        IOSModule().provideCreateTaskUseCase().invoke(
+            args: CreateTask(title: title, description: description), completionHandler: { task, err in
+                self.load()
+        })
+    }
 }

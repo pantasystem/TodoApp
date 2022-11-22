@@ -18,7 +18,6 @@ import javax.inject.Singleton
 @Singleton
 class ApiProvider @Inject constructor() {
 
-    val client = HttpClient(CIO)
 
     private val httpClientConfig: ((HttpClientConfig<*>) -> Unit) = {
 
